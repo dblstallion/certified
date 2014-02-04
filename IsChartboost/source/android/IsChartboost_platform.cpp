@@ -175,6 +175,7 @@ void IsChartboostSetAppID_platform(const char* id)
     JNIEnv* env = s3eEdkJNIGetEnv();
     jstring id_jstr = env->NewStringUTF(id);
     env->CallVoidMethod(g_Obj, g_IsChartboostSetAppID, id_jstr);
+	env->DeleteLocalRef(id_jstr);
 }
 
 void IsChartboostSetAppSignature_platform(const char* signature)
@@ -182,6 +183,7 @@ void IsChartboostSetAppSignature_platform(const char* signature)
     JNIEnv* env = s3eEdkJNIGetEnv();
     jstring signature_jstr = env->NewStringUTF(signature);
     env->CallVoidMethod(g_Obj, g_IsChartboostSetAppSignature, signature_jstr);
+	env->DeleteLocalRef(signature_jstr);
 }
 
 void IsChartboostStartSession_platform()
@@ -201,6 +203,7 @@ void IsChartboostCacheInterstitial_platform(const char* name)
     JNIEnv* env = s3eEdkJNIGetEnv();
     jstring name_jstr = env->NewStringUTF(name);
     env->CallVoidMethod(g_Obj, g_IsChartboostCacheInterstitial, name_jstr);
+	env->DeleteLocalRef(name_jstr);
 }
 
 void IsChartboostShowInterstitial_platform(const char* name)
@@ -208,6 +211,7 @@ void IsChartboostShowInterstitial_platform(const char* name)
     JNIEnv* env = s3eEdkJNIGetEnv();
     jstring name_jstr = env->NewStringUTF(name);
     env->CallVoidMethod(g_Obj, g_IsChartboostShowInterstitial, name_jstr);
+	env->DeleteLocalRef(name_jstr);
 }
 
 void IsChartboostCacheMoreApps_platform()

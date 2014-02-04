@@ -20,8 +20,6 @@ namespace
 {
 
 	int s_DisableChartboost = 0;
-	char* s_ApplicationID; 
-	char* s_ApplicationSecret;
 
 	bool IsDisabled()
     {
@@ -41,21 +39,23 @@ namespace
 s3eResult IsChartboostInit()
 {
 
-	s_ApplicationID = new char[0xff];
-	s_ApplicationSecret = new char[0xff];
+	char s_ApplicationID[0xff];
+	char s_ApplicationSecret[0xff];
+	
+	s3eResult appIdResult, appSecretResult;
 
 	switch( s3eDeviceGetInt(S3E_DEVICE_OS) )
 	{
 	case S3E_OS_ID_IPHONE:
 		{
-			s3eConfigGetString("ISCHARTBOOST", "IOSAppID", s_ApplicationID );
-			s3eConfigGetString("ISCHARTBOOST", "IOSAppSecret", s_ApplicationSecret );
+			appIdResult = s3eConfigGetString("ISCHARTBOOST", "IOSAppID", s_ApplicationID );
+			appSecretResult = s3eConfigGetString("ISCHARTBOOST", "IOSAppSecret", s_ApplicationSecret );
 		}
 		break;
 	case S3E_OS_ID_ANDROID:
 		{
-			s3eConfigGetString("ISCHARTBOOST", "AndroidAppID", s_ApplicationID  );
-			s3eConfigGetString("ISCHARTBOOST",  "AndroidAppSecret" , s_ApplicationSecret);
+			appIdResult = s3eConfigGetString("ISCHARTBOOST", "AndroidAppID", s_ApplicationID  );
+			appSecretResult = s3eConfigGetString("ISCHARTBOOST",  "AndroidAppSecret" , s_ApplicationSecret);
 		}
 		break;
 	default: 
@@ -65,7 +65,7 @@ s3eResult IsChartboostInit()
 	}
 
 	s3eResult rtn = IsChartboostInit_platform();
-	if( S3E_RESULT_SUCCESS == rtn ) 
+	if( S3E_RESULT_SUCCESS == rtn && S3E_RESULT_SUCCESS == appIdResult && S3E_RESULT_SUCCESS == appSecretResult ) 
 	{
 		IsChartboostSetAppID(s_ApplicationID);
 		IsChartboostSetAppSignature(s_ApplicationSecret);
@@ -76,8 +76,6 @@ s3eResult IsChartboostInit()
 
 void IsChartboostTerminate()
 {
-	delete s_ApplicationID;
-	delete s_ApplicationSecret;
     //Add any generic termination code here
     IsChartboostTerminate_platform();
 }
