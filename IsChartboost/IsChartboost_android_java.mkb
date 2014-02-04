@@ -6,6 +6,7 @@ files
 {
     (source/android)
     IsChartboost.java
+	IsChartboostActivity.java
 }
 
 librarypath "$MARMALADE_ROOT/s3e/deploy/plugins/android/android.jar"

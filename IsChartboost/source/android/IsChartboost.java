@@ -8,81 +8,23 @@ import android.os.Bundle;
 import com.chartboost.sdk.*;
 
 
-public class IsChartboost extends LoaderActivity
+public class IsChartboost
 {
-    private final String TAG = "CHARTBOOST";
+	private final String TAG = "CHARTBOOST";
+
 	private String APP_ID = null;
     private String APP_SIGNATURE = null;
     private Boolean setCallback = false;
-    
-    public static IsChartboost m_Activity = null;
-    private Chartboost cb;
     
     // Native JNI functions used for EDK Callback
     public native void IsChartboostRequestCallback(int result);
     public native void IsChartboostAdClosedCallback(int result);
     public native void IsChartboostAdDismissedRequestCallback(int result);
     public native void IsChartboostAdClickedRequestCallback(int result);
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-    
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        
-        m_Activity = this;
-        
-		this.cb = Chartboost.sharedChartboost();
-  
-    }
-    
-    @Override
-    protected void onPause()
-    {
-        Log.v(TAG, "onPause");
-        super.onPause();
-    }
-
-     @Override
-    protected void onResume()
-    {
-        Log.v(TAG, "onResume");
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-		this.cb.onDestroy(this);
-    }
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-
-	 this.cb.onStop(this);
-
-	}
-
-    @Override
-    public void onBackPressed() {
-
-        // If an interstitial is on screen, close it. Otherwise continue as normal.
-       if (this.cb.onBackPressed())
-          return;
-	   else
-            super.onBackPressed();
-    }
-   
+	
     public void IsChartboostCacheInterstitial(String name)
     {
-        this.cb.cacheInterstitial(name);
+        Chartboost.sharedChartboost().cacheInterstitial(name);
 	}
 
         public void IsChartboostSetAppID(String id)
@@ -105,27 +47,27 @@ public class IsChartboost extends LoaderActivity
     }
     public void IsChartboostStartSession()
     {
-		this.cb.onCreate(this, APP_ID, APP_SIGNATURE, chartBoostDelegate);
-		this.cb.startSession();
-		this.cb.onStart(this);
+		Chartboost.sharedChartboost().onCreate(LoaderActivity.m_Activity, APP_ID, APP_SIGNATURE, chartBoostDelegate);
+		Chartboost.sharedChartboost().startSession();
+		Chartboost.sharedChartboost().onStart(LoaderActivity.m_Activity);
     }
 
     public void IsChartboostRequestAd()
     {
         setCallback = true;
-        this.cb.showInterstitial();
+        Chartboost.sharedChartboost().showInterstitial();
     }
     public void IsChartboostShowInterstitial(String name)
     {
-        this.cb.showInterstitial();
+        Chartboost.sharedChartboost().showInterstitial();
     }
     public void IsChartboostCacheMoreApps()
     {
-        this.cb.cacheMoreApps();
+        Chartboost.sharedChartboost().cacheMoreApps();
     }
     public void IsChartboostShowMoreApps()
     {
-        this.cb.showMoreApps();
+        Chartboost.sharedChartboost().showMoreApps();
     }
     private ChartboostDelegate chartBoostDelegate = new ChartboostDelegate() {
 

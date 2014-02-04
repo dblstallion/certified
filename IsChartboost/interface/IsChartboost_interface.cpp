@@ -11,10 +11,12 @@
 #include "IsChartboost.h"
 
 
-// For MIPs (and WP8) platform we do not have asm code for stack switching 
+#ifndef S3E_EXT_SKIP_LOADER_CALL_LOCK
+// For MIPs (and WP8) platform we do not have asm code for stack switching
 // implemented. So we make LoaderCallStart call manually to set GlobalLock
 #if defined __mips || defined S3E_ANDROID_X86 || (defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP))
-#define LOADER_CALL
+#define LOADER_CALL_LOCK
+#endif
 #endif
 
 /**
@@ -62,7 +64,7 @@ static bool _extLoad()
             g_GotExt = true;
         else
             s3eDebugAssertShow(S3E_MESSAGE_CONTINUE_STOP_IGNORE,                 "error loading extension: IsChartboost");
-            
+
         g_TriedExt = true;
         g_TriedNoMsgExt = true;
     }
@@ -98,13 +100,13 @@ s3eResult IsChartboostRegister(IsChartboostCallback cbid, s3eCallback fn, void* 
     if (!_extLoad())
         return S3E_RESULT_ERROR;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     s3eResult ret = g_Ext.m_IsChartboostRegister(cbid, fn, userData);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -118,13 +120,13 @@ s3eResult IsChartboostUnRegister(IsChartboostCallback cbid, s3eCallback fn)
     if (!_extLoad())
         return S3E_RESULT_ERROR;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     s3eResult ret = g_Ext.m_IsChartboostUnRegister(cbid, fn);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -138,13 +140,13 @@ void IsChartboostSetAppID(const char* id)
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostSetAppID(id);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -158,13 +160,13 @@ void IsChartboostSetAppSignature(const char* signature)
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostSetAppSignature(signature);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -178,13 +180,13 @@ void IsChartboostStartSession()
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostStartSession();
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -198,13 +200,13 @@ void IsChartboostRequestAd()
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostRequestAd();
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -218,13 +220,13 @@ void IsChartboostCacheInterstitial(const char* name)
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostCacheInterstitial(name);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -238,13 +240,13 @@ void IsChartboostShowInterstitial(const char* name)
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostShowInterstitial(name);
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -258,13 +260,13 @@ void IsChartboostCacheMoreApps()
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostCacheMoreApps();
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
@@ -278,13 +280,13 @@ void IsChartboostShowMoreApps()
     if (!_extLoad())
         return;
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     g_Ext.m_IsChartboostShowMoreApps();
 
-#ifdef LOADER_CALL
+#ifdef LOADER_CALL_LOCK
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 

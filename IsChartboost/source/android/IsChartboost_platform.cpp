@@ -81,8 +81,7 @@ s3eResult IsChartboostInit_platform()
     JNIEnv* env = s3eEdkJNIGetEnv();
     jobject obj = NULL;
     jmethodID cons = NULL;
-    jclass cls;
-    jfieldID  field;
+	
 	char g_AppID[255];
 	char g_AppSignature[255];
 
@@ -96,16 +95,16 @@ s3eResult IsChartboostInit_platform()
 
     
     // Get the extension class
-    cls = s3eEdkAndroidFindClass("com/isextension/IsChartboost");
+    jclass cls = s3eEdkAndroidFindClass("com/isextension/IsChartboost");
     if (!cls)
         goto fail;
-
-    // Setup and cache the Activity Field
-    field = env->GetStaticFieldID(cls, "m_Activity", "Lcom/isextension/IsChartboost;");
-    if (!field)
+		
+	// Get its constructor
+    cons = env->GetMethodID(cls, "<init>", "()V");
+    if (!cons)
         goto fail;
 
-    obj = env->GetStaticObjectField(cls, field);
+    obj = env->NewObject(cls, cons);
     if (!obj)
         goto fail;
         
